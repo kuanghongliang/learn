@@ -1,0 +1,1 @@
+1¡¢ php think build --module mobile ½¨Á¢mobileÄ£¿é

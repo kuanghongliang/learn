@@ -1,1 +1,2 @@
-1¡¢ php think build --module mobile ½¨Á¢mobileÄ£¿é
+1ã€ php think build --module mobile å»ºç«‹mobileæ¨¡å—
+2ã€ composer require topthink/think-captcha å®‰è£…éªŒè¯ç æ‰©å±•

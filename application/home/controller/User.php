@@ -7,13 +7,14 @@
  */
 
 namespace app\home\controller;
+use app\home\model\SmsLog;
 use think\Cookie;
 use think\Request;
 use think\Db;
 use think\Session;
-use think\View;
 use app\common\utils\StringUtils;
 use app\common\utils\Common;
+
 class User extends Base
 {
 
@@ -42,6 +43,8 @@ class User extends Base
     {
         //$view = new View();
         //return $view->fetch('common/error');
+        Session::init();
+        $sessionId = session_id();
         $request = Request::instance();
         if($request->isPost()) {
             $username = $request->param('username');
@@ -53,6 +56,23 @@ class User extends Base
                 if(!$code){
                     $this->error($this->errors[20]);
                 }
+                $smsCodeExpire = 1;
+                $smsLog = new SmsLog();
+                $result = $smsLog->where('mobile',$username)
+                    ->where('session_id',$sessionId)
+                    ->order('id','DESC')
+                    ->find();
+                if(empty($result)){
+                    exit($this->returnJsonError(24));
+                }
+                if(time() - $smsLog['add_time'] > $smsCodeExpire*60) {
+                    exit($this->returnJsonError(25));
+                }
+                //验证通过后删除验证码
+                Db::name('sms_log')
+                    ->where('mobile',$username)
+                    ->where('session_id',$sessionId)
+                    ->delete();
             }
             $res = $this->saveReg($username,$password,$password2,$captcha);
             if($res['status'] != 1){//验证失败
@@ -212,12 +232,13 @@ class User extends Base
      */
     public function sendMobileCode()
     {
+        Session::init();
+        $sessionId = session_id();
         $request = Request::instance();
         $mobile = $request->param('mobile');
         if(!StringUtils::checkMobile($mobile)){
             exit($this->returnJsonError(21));
         }
-        $sessionId = session_id('aaaa');
         $smsLog = Db::name('sms_log')
             ->where('mobile',$mobile)
             ->where('session_id',$sessionId)
@@ -233,7 +254,7 @@ class User extends Base
         if(!$res){
             exit($this->returnJsonError(22));
         }
-        exit($this->returnJsonSuccess());
+        exit($this->returnJsonSuccess(11));
     }
 
 }

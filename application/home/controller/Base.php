@@ -31,6 +31,15 @@ class Base extends Controller{
         $this->errors['21'] = '手机号码格式不正确';
         $this->errors['22'] = '发送失败';
         $this->errors['23'] = '秒内不允许重复发送';
+        $this->errors['24'] = '手机验证码不匹配';
+        $this->errors['25'] = '手机验证码超时';
+
+
+
+        /*
+         * 成功返回的信息
+         */
+        $this->success['11'] = '验证码已发送，请注意查收';
     }
     protected function returnJsonError($code,$param='')
     {
@@ -38,9 +47,9 @@ class Base extends Controller{
         return json_encode($data);
     }
 
-    protected function returnJsonSuccess()
+    protected function returnJsonSuccess($code=0)
     {
-        $data = array('rs'=>true,'msg'=>'成功');
+        $data = array('rs'=>true,'msg'=>$code ? $this->success['11'] : '成功');
         return json_encode($data);
     }
 }

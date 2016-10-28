@@ -7,7 +7,6 @@
  */
 
 namespace app\common\utils;
-use app\common\utils\SmsUtils;
 use think\Db;
 class Common {
 
@@ -23,5 +22,9 @@ class Common {
         }else{
             return false;
         }
+    }
+    public static function checkSmsCode()
+    {
+
     }
 }

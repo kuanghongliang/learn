@@ -10,9 +10,12 @@ namespace app\home\controller;
 use think\Cookie;
 use think\Request;
 use think\Db;
+use think\Session;
 use think\View;
-use app\common\utils\Validate;
-class User extends Base{
+use app\common\utils\StringUtils;
+use app\common\utils\Common;
+class User extends Base
+{
 
     public function login()
     {
@@ -30,7 +33,8 @@ class User extends Base{
     public function reg()
     {
         //return $this->fetch();
-        return view('reg');
+        $smsCodeExpire = 1;
+        return view('reg',['sms_time_out' => $smsCodeExpire*60]);
 
     }
 
@@ -39,13 +43,13 @@ class User extends Base{
         //$view = new View();
         //return $view->fetch('common/error');
         $request = Request::instance();
-        if($request->isPost() == 'POST') {
+        if($request->isPost()) {
             $username = $request->param('username');
             $password = $request->param('password');
             $password2 = $request->param('password2');
             $captcha = $request->param('verify_code');
             $code = $request->param('code');
-            if(Validate::checkMobile($username)){
+            if(StringUtils::checkMobile($username)){
                 if(!$code){
                     $this->error($this->errors[20]);
                 }
@@ -60,7 +64,8 @@ class User extends Base{
             Cookie::set('user_id',$user['user_id'],['path' => '/']);
             $nickname = empty($user['nickname']) ? $username : $user['nickname'];
             Cookie::set('user_name',$nickname,['path' => '/']);
-            return view('index');
+            //跳转到首页，指向index控制器index方法
+            $this->redirect('index/index');
         }
     }
 
@@ -71,11 +76,11 @@ class User extends Base{
             $result['msg'] = $this->errors[11];
             return $result;
         }
-        if(!Validate::checkMobileOrEmail($username)){
+        if(!StringUtils::checkMobileOrEmail($username)){
             $result['msg'] = $this->errors[15];
             return $result;
         }
-        if(Validate::checkMobile($username)){
+        if(StringUtils::checkMobile($username)){
             $map['mobile_validated'] = 1;
             $map['nickname'] = $map['mobile'] = $username;
         }else{
@@ -199,6 +204,36 @@ class User extends Base{
         }else{
             exit($this->returnJsonError(1));
         }
+    }
+
+    /*
+     * 手机发送验证码
+     * return json
+     */
+    public function sendMobileCode()
+    {
+        $request = Request::instance();
+        $mobile = $request->param('mobile');
+        if(!StringUtils::checkMobile($mobile)){
+            exit($this->returnJsonError(21));
+        }
+        $sessionId = session_id('aaaa');
+        $smsLog = Db::name('sms_log')
+            ->where('mobile',$mobile)
+            ->where('session_id',$sessionId)
+            ->order('id','DESC')
+            ->find();
+        $smsCodeExpire = 1;
+        if($smsLog && time() - $smsLog['add_time'] < $smsCodeExpire*60) {
+            exit($this->returnJsonError(23,$smsCodeExpire*60));
+        }
+        $code = rand(100000,999999);
+        $content = "你的验证码为：".$code."，有效时间为".$smsCodeExpire."分钟，请不要随意泄露！";
+        $res = Common::sendMobileCode($mobile,$content,$code,$sessionId);
+        if(!$res){
+            exit($this->returnJsonError(22));
+        }
+        exit($this->returnJsonSuccess());
     }
 
 }

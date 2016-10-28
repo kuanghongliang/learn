@@ -198,6 +198,8 @@ return [
         'prefix'         => 'think',
         // 驱动方式 支持redis memcache memcached
         'type'           => '',
+        //session 有效时间
+        'expire'         => 3600,
         // 是否自动开启 SESSION
         'auto_start'     => true,
     ],

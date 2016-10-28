@@ -11,6 +11,7 @@ namespace app\home\controller;
 use think\Controller;
 
 class Base extends Controller{
+
     public function __construct()
     {
         //1-10 保留
@@ -27,10 +28,13 @@ class Base extends Controller{
         $this->errors['18'] = '账号已存在';
         $this->errors['19'] = '注册失败';
         $this->errors['20'] = '请输入短信验证码';
+        $this->errors['21'] = '手机号码格式不正确';
+        $this->errors['22'] = '发送失败';
+        $this->errors['23'] = '秒内不允许重复发送';
     }
-        protected function returnJsonError($code)
+    protected function returnJsonError($code,$param='')
     {
-        $data = array('rs'=>false,'msg'=>$this->errors[$code]);
+        $data = array('rs'=>false,'msg'=>$param ? $param.$this->errors[$code] : $this->errors[$code]);
         return json_encode($data);
     }
 

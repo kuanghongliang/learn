@@ -254,18 +254,30 @@
             layer.alert('请输入正确的手机号码', {icon: 2});// alert('请输入正确的手机号码');
             return;
         }
-        var url = "/index.php?m=Home&c=User&a=send_sms_reg_code&mobile="+mobile;
-        $.get(url,function(data){
-            obj = $.parseJSON(data);
-            if(obj.status == 1)
+        var url = "/home/user/sendMobileCode";
+        $.get(url,{mobile:mobile},function(data){
+            if(data.rs)
             {
                 $('#count_down').attr("disabled","disabled");
-                /*intAs = {sms_time_out};*/ // 手机短信超时时间
+                intAs = {$sms_time_out}; // 手机短信超时时间
+                jsInnerTimeout('count_down',intAs);
+            }
+            layer.alert(data.msg, {icon: 1});// alert(obj.msg);
+
+        },'json');
+
+       /* var url = "/home/user/sendMobileCode?mobile="+mobile;
+        $.get(url,function(data){
+            obj = $.parseJSON(data);
+            if(obj.rs)
+            {
+                $('#count_down').attr("disabled","disabled");
+                *//*intAs = {sms_time_out};*//* // 手机短信超时时间
                 jsInnerTimeout('count_down',intAs);
             }
             layer.alert(obj.msg, {icon: 1});// alert(obj.msg);
 
-        })
+        });*/
     }
 
     $('#count_down').removeAttr("disabled");

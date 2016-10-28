@@ -7,7 +7,7 @@
  */
 namespace app\common\utils;
 
-class Validate {
+class StringUtils {
 
     /*
      * 手机号或固话验证

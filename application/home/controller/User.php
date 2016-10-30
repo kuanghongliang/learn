@@ -65,7 +65,7 @@ class User extends Base
                 if(empty($result)){
                     exit($this->returnJsonError(24));
                 }
-                if(time() - $smsLog['add_time'] > $smsCodeExpire*60) {
+                if(time() - $result['add_time'] > $smsCodeExpire*60) {
                     exit($this->returnJsonError(25));
                 }
                 //验证通过后删除验证码
@@ -163,6 +163,8 @@ class User extends Base
             $username = $request->param('username');
             $password = $request->param('password');
             $code = $request->param('verify_code');
+            //是否记住
+            $isRemember = $request->param('isRemember');
             if (!captcha_check($code)) {
                 //验证失败
                 exit($this->returnJsonError(11));
@@ -178,9 +180,15 @@ class User extends Base
             } elseif ($user['is_lock'] == 1) {
                 exit($this->returnJsonError(14));
             } else {
-                Cookie::set('user_id', $user['user_id'], ['path' => '/']);
-                $nickname = empty($user['nickname']) ? $username : $user['nickname'];
-                Cookie::set('user_name',$nickname,['path' => '/']);
+                if($isRemember){
+                    Cookie::set('user_id', $user['user_id'], ['expire'=> 3600*24*7,'path' => '/']);
+                    $nickname = empty($user['nickname']) ? $username : $user['nickname'];
+                    Cookie::set('user_name',$nickname,['expire'=> 3600*24*7,'path' => '/']);
+                }else {
+                    Cookie::set('user_id', $user['user_id'], ['path' => '/']);
+                    $nickname = empty($user['nickname']) ? $username : $user['nickname'];
+                    Cookie::set('user_name', $nickname, ['path' => '/']);
+                }
                 exit($this->returnJsonSuccess());
             }
         }else{
@@ -245,7 +253,10 @@ class User extends Base
             ->order('id','DESC')
             ->find();
         $smsCodeExpire = 1;
-        if($smsLog && time() - $smsLog['add_time'] < $smsCodeExpire*60) {
+        if(!$smsLog){
+            exit($this->returnJsonError(24));
+        }
+        if(time() - $smsLog['add_time'] < $smsCodeExpire*60) {
             exit($this->returnJsonError(23,$smsCodeExpire*60));
         }
         $code = rand(100000,999999);
@@ -255,6 +266,31 @@ class User extends Base
             exit($this->returnJsonError(22));
         }
         exit($this->returnJsonSuccess(11));
+    }
+
+    public function checkMobileCode()
+    {
+        Session::init();
+        $sessionId = session_id();
+        $request = Request::instance();
+        $mobile = $request->param('mobile');
+        $code = $request->param('code');
+        if($request->isPost()){
+            $smsLog = Db::name('sms_log')
+                ->where('mobile',$mobile)
+                ->where('session_id',$sessionId)
+                ->order('id','DESC')
+                ->find();
+            if(!$smsLog){
+                exit($this->returnJsonError(24));
+            }
+            if($smsLog['code'] != $code){
+                exit($this->returnJsonError(24));
+            }
+            exit($this->returnJsonSuccess());
+        }else{
+            exit($this->returnJsonError(1));
+        }
     }
 
 }

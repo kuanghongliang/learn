@@ -157,6 +157,7 @@
 </div>
 <script>
     flag = true;
+    state = true;
     error = '';
     $(document).ready(function(){
         $("input[name='username']").blur(function () {
@@ -181,7 +182,30 @@
             }else{
                 error = '用户名格式不正确';
             }
-        })
+        });
+
+        $("input[name='code']").blur(function () {
+            var code = $(this).val();
+            var username = $("#username2").val();
+            var re = /^(13[0-9]{9})|(15[^4,\\D][0-9]{8})|(18[0-9]{9})|(17[0-9]{9})$/;
+            if (re.test(username)) {
+                $.ajax({
+                    type: "POST",
+                    url: "/home/user/checkMobileCode",//+tab,
+                    data: {username: username,code: code},// 你的formid 搜索表单 序列化提交
+                    success: function (data) {
+                        if (data.rs) {
+                            state = true;
+                        } else {
+                            state = false;
+                        }
+                    }
+                });
+            }else{
+                error = '手机号格式不正确';
+            }
+        });
+
     });
 
     function check_submit(obj){
@@ -190,6 +214,7 @@
         var password2 = $(obj).find('input[name="password2"]').val();
         var verify_code = $(obj).find('input[name="verify_code"]').val();
         var agree = $(obj).find('input[type="checkbox"]:checked').val();
+        //var code = $(obj).find('input[name="code"]').val();
         if(error != ''){
             layer.alert(error, {icon: 2});
             error = '';
@@ -234,6 +259,12 @@
         }
         if(!flag){
             error = '用户名已经被注册';
+            layer.alert(error, {icon: 2});
+            error = '';
+            return false;
+        }
+        if(!state){
+            error = '手机验证码错误';
             layer.alert(error, {icon: 2});
             error = '';
             return false;

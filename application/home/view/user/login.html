@@ -85,6 +85,7 @@
         var password = $.trim($('#password').val());
         var referurl = $('#referurl').val();
         var verify_code = $.trim($('#verify_code').val());
+        var isRemember = $("input[type='checkbox']").is(':checked');
         if(username == ''){
             ChkUtil.showErrorMsg('用户名不能为空!');
             return false;
@@ -105,7 +106,7 @@
         $.ajax({
             type : 'post',
             url : '/home/user/loginVerify',
-            data : {username:username,password:password,referurl:referurl,verify_code:verify_code},
+            data : {username:username,password:password,referurl:referurl,verify_code:verify_code,isRemember:isRemember},
             dataType : 'json',
             success : function(res){
                 if(res.rs == 1){

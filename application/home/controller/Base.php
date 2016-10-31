@@ -14,6 +14,7 @@ class Base extends Controller{
 
     public function __construct()
     {
+        parent::__construct();
         //1-10 保留
         $this->errors['1'] = '请求不合法';
         $this->errors['2'] = '请求参数错误';

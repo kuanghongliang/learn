@@ -1,27 +1,23 @@
 <script src="__PUBLIC__/js/jquery-1.10.2.min.js"></script>
 <script src="__PUBLIC__/js/global.js"></script>
 <!--最顶部-->
-<include file="Public/siteTopbar" />
+{include file="common/siteTopbar" /}
 
 <!--------在线客服-------------->
-<include file="Public/kefu" />
+{include file="common/kefu" /}
 <!--------在线客服-------------->
 
 <!--顶部banner开始-->
-<?php if(MODULE_NAME.'/'.CONTROLLER_NAME.'/'.ACTION_NAME == 'Home/Index/index' && $_COOKIE["top-banner"] == null){ ?>
 <div class="top-banner" id="top-banner-block">
     <div class="top-banner-max">
         <!---广告 select * from __PREFIX__ad where position_id = 1 limit 1-->
         <adv pid = "1" limit="1" item="v">
-            <a href="{$v.ad_link}" <if condition="$v['target'] eq 1">target="_blank"</if>> <img src="{$v[ad_code]}"  title="{$v[title]}" style="{$v[style]}"/></a>
+            <a href="" > <img src="/upload/ad/2016/04-25/571dafa754296.jpg"  title="" style=""/></a>
             <a class="button-top-banner-close" href="javascript:;" title="关闭" id="top-banner-min-close" onClick="javascript:$('#top-banner-block').hide();">－</a>
         </adv>
     </div>
 </div>
-<?php 
-		setcookie("top-banner", "1", time()+ 3600); // 弹过窗的 不在弹窗
-	} 
-?>
+
 <!--顶部banner结束-->
 
 <header>
@@ -29,21 +25,21 @@
     <div class="layout">
 
         <!--logo开始-->
-        <div class="logo"><a href="/" title="TPshop"><img src="{$tpshop_config['shop_info_store_logo']}" alt="TPshop"></a></div>
+        <div class="logo"><a href="/" title="TPshop"><img src="__STATIC__/images/newLogo.png" alt="TPshop"></a></div>
         <!--logo结束-->
 
         <!-- 搜索开始-->
         <div class="searchBar">
             <div class="searchBar-form">
-                <form name="sourch_form" id="sourch_form" method="post" action="{:U("/Home/Goods/search")}">
-                <input type="text" class="text" name="q" id="q" value="<?php echo I('q'); ?>"  placeholder="  搜索关键字"/>
+                <form name="sourch_form" id="sourch_form" method="post" action="">
+                <input type="text" class="text" name="q" id="q" value=""  placeholder="  搜索关键字"/>
                 <input type="button" class="button" value="搜索" onclick="if($.trim($('#q').val()) != '') $('#sourch_form').submit();"/>
                 </form>
             </div>
             <div class="searchBar-hot">
                 <b>热门搜索</b>
                 <foreach name="tpshop_config.hot_keywords" item="wd" key="k">
-                    <a target="_blank" href="{:U('Home/Goods/search',array('q'=>$wd))}" <if condition="$k eq 0">class="ht"</if>>{$wd}</a>
+                    <a target="_blank" href="" ></a>
                 </foreach>
             </div>
         </div>
@@ -53,7 +49,7 @@
             <div class="my-mall">
                 <!---我的商城-开始 -->
                 <div class="mall">
-                    <div class="le"><a href="{:U('/Home/User')}" >我的商城</a></div>
+                    <div class="le"><a href="" >我的商城</a></div>
                 </div>
                 <!---我的商城-结束 -->
             </div>
@@ -61,12 +57,12 @@
                 <!---购物车-开始 -->
                 <div class="micart">
                     <div class="le les">
-                        <a href="{:U('Home/Cart/cart')}" >我的购物车
+                        <a href="" >我的购物车
                             <span class="shopping-num"><em id="cart_quantity"></em><b></b></span>
                         </a>
                     </div>
 
-                    <div class="ri ris" style="display:">
+                    <div class="ri ris" style="display:none;">
                         <if condition="count($cartList) eq 0">
                             <div class="micart-about">
                                 <span class="micart-xg">您的购物车是空的，赶紧选购吧！</span>
@@ -79,20 +75,20 @@
                                         <div>
                                             <div class="p-img">
                                                 <a href="">
-                                                    <img src="{$v.goods_id|goods_thum_images=428,428}" alt="">
+                                                    <img src="" alt="">
                                                 </a>
                                             </div>
                                             <div class="p-name">
                                                 <a href="">
-                                                    <span class="p-slogan">{$v[goods_name]}</span>
+                                                    <span class="p-slogan"></span>
                                                     <span class="p-promotions hide"></span>
                                                 </a>
                                             </div>
                                             <div class="p-status">
                                                 <div class="p-price">
-                                                    <b>¥&nbsp;{$v[goods_price]}</b>
+                                                    <b>¥&nbsp;</b>
                                                     <em>x</em>
-                                                    <span>{$v[goods_num]}</span>
+                                                    <span></span>
                                                 </div>
                                                 <div class="p-tags"></div>
                                             </div>
@@ -105,8 +101,8 @@
                             </ul>
                         </div>
                         <div class="settle">
-                            <p>共<em>{$cart_total_price[anum]}</em>件商品，金额合计<b>¥&nbsp;{$cart_total_price[total_fee]}</b></p>
-                            <a class="js-button" href="{:U('Home/Cart/cart')}">去结算</a>
+                            <p>共<em></em>件商品，金额合计<b>¥&nbsp;</b></p>
+                            <a class="js-button" href="">去结算</a>
                         </div>
                     </div>
                 </div>
@@ -128,20 +124,20 @@
         <!--全部商品-开始-->
         <div class="allgoods">
             <div class="goods_num"><h2>全部商品</h2><i class="trinagle"></i></div>
-            <div class="list" <?php if(MODULE_NAME.'/'.CONTROLLER_NAME.'/'.ACTION_NAME == 'Home/Index/index') echo 'style="display:block;"'; ?> >
+            <div class="list"  >
             <ul class="list_ul">
                 <foreach name="goods_category_tree" key="k" item='v'>
                     <if condition="$v[level] eq 1">
                         <li class="list-li">
                             <div class="list_a">
-                                <h3><a href="{:U('Home/Goods/goodsList',array('id'=>$v[id]))}"><span>{$v['name']}</span></a></h3>
+                                <h3><a href=""><span></span></a></h3>
                                 <p> <!--$v[id][name] 数组中括号 里面的 id name 不能有 引号 sql 参数 必须双引号-->
                                     <assign name="index" value="1" />
                                     <foreach name="v[tmenu]" item="v2" key="k2" >
-                                        <if condition="$v2[parent_id] eq $v[id]">
-                                            <?php if($index++ > 3) break; ?>
-                                            <a href="{:U('Home/Goods/goodsList',array('id'=>$v2[id]))}">{$v2['name']}</a>
-                                        </if>
+
+
+                                            <a href=""></a>
+
                                     </foreach>
                                 </p>
                             </div>
@@ -149,21 +145,21 @@
                                 <div class="list_bigfl">
                                     <assign name="index" value="1" />
                                     <foreach name="v[tmenu]" item="v2" key="k2" >
-                                        <if condition="$v2[parent_id] eq $v[id]">
-                                            <?php if($index++ > 6) break; ?>
-                                            <a class="list_big_o ma-le-30" href="{:U('Home/Goods/goodsList',array('id'=>$v2[id]))}">{$v2['name']}<i>＞</i></a>
+                                        <if condition="">
+
+                                            <a class="list_big_o ma-le-30" href=""><i>＞</i></a>
                                         </if>
                                     </foreach>
                                 </div>
                                 <div class="subitems">
                                     <foreach name="v[tmenu]" item="v2" key="k2" >
-                                        <if condition="$v2[parent_id] eq $v[id]">
+                                        <if condition="">
                                             <dl class="ma-to-20 cl-bo">
-                                                <dt class="bigheader wh-sp"><a href="{:U('Home/Goods/goodsList',array('id'=>$v2[id]))}">{$v2['name']}</a><i>＞</i></dt>
+                                                <dt class="bigheader wh-sp"><a href=""></a><i>＞</i></dt>
                                                 <dd class="ma-le-100">
                                                     <foreach name="v2[sub_menu]" item="v3" key="k3" >
-                                                        <if condition="$v3[parent_id] eq $v2[id]">
-                                                            <a class="hover-r ma-le-10 ma-bo-10 pa-le-10 bo-le-hui fl wh-sp" href="{:U('Home/Goods/goodsList',array('id'=>$v3[id]))}">{$v3['name']}</a>
+                                                        <if condition="">
+                                                            <a class="hover-r ma-le-10 ma-bo-10 pa-le-10 bo-le-hui fl wh-sp" href=""></a>
                                                         </if>
                                                     </foreach>
                                                 </dd>
@@ -184,8 +180,8 @@
     <div class="ongoods">
         <ul class="navlist">
             <li class="homepage"><a href="/"><span>首页</span></a></li>
-            <tpshop sql="SELECT * FROM `__PREFIX__navigation` where is_show = 1 ORDER BY `sort` DESC" key="k" item='v'>
-                <li class="page"><a href="{$v[url]}" <if condition="$v[is_new] eq 1">target="_blank" </if><span>{$v[name]}</span></a></li>
+            <tpshop>
+                <li class="page"><a href="" ><span></span></a></li>
             </tpshop>
         </ul>
     </div>
@@ -194,7 +190,7 @@
 <!-- 导航-结束-->
 <script>
     $(function(){
-        var active_li = '{$active}';
+        var active_li = '';
         if(active_li){
             $('li').remove('curr-res');
             $('#'+active_li).addClass('curr-res');

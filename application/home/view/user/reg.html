@@ -2,11 +2,11 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>注册-</title>
+    <title>注册-{$abc}</title>
     <meta http-equiv="keywords" content="" />
     <meta name="description" content="" />
     <link rel="stylesheet" href="__STATIC__/css/index.css" type="text/css">
-    <script src="__STATIC__/js/jquery-1.10.2.min.js"></script>
+    <script src="__PUBLIC__/js/jquery-1.10.2.min.js"></script>
     <script src="__STATIC__/js/slider.js"></script>
     <script src="__PUBLIC__/js/layer/layer.js"></script><!--弹窗js 参考文档 http://layer.layui.com/-->
     <script src="__PUBLIC__/js/global.js"></script>
@@ -290,7 +290,7 @@
             if(data.rs)
             {
                 $('#count_down').attr("disabled","disabled");
-                intAs = {$sms_time_out}; // 手机短信超时时间
+                intAs = '{$sms_time_out}'; // 手机短信超时时间
                 jsInnerTimeout('count_down',intAs);
             }
             layer.alert(data.msg, {icon: 1});// alert(obj.msg);

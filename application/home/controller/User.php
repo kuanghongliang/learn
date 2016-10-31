@@ -35,7 +35,7 @@ class User extends Base
     {
         //return $this->fetch();
         $smsCodeExpire = 1;
-        return view('reg',['sms_time_out' => $smsCodeExpire*60]);
+        return view('reg',['sms_time_out' => $smsCodeExpire*60,'abc'=>$this->abc]);
 
     }
 
@@ -63,10 +63,10 @@ class User extends Base
                     ->order('id','DESC')
                     ->find();
                 if(empty($result)){
-                    exit($this->returnJsonError(24));
+                    $this->error($this->errors[24]);
                 }
                 if(time() - $result['add_time'] > $smsCodeExpire*60) {
-                    exit($this->returnJsonError(25));
+                    $this->error($this->errors[25]);
                 }
                 //验证通过后删除验证码
                 Db::name('sms_log')

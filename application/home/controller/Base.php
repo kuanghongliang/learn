@@ -41,6 +41,7 @@ class Base extends Controller{
          */
         $this->success['11'] = '验证码已发送，请注意查收';
     }
+
     protected function returnJsonError($code,$param='')
     {
         $data = array('rs'=>false,'msg'=>$param ? $param.$this->errors[$code] : $this->errors[$code]);

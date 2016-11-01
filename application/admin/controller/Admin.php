@@ -14,6 +14,10 @@ use think\Session;
 class Admin extends Base{
     public function login()
     {
+        //判断是否已登录，登录跳到首页
+        if(session('?admin_id') && session('admin_id') > 0){
+            $this->redirect('index/index');
+        }
         $request = Request::instance();
         //登录验证
         if($request->isPost()){
@@ -59,5 +63,54 @@ class Admin extends Base{
             }
         }
         return $this->fetch();
+    }
+
+    public function logout()
+    {
+        Session::delete('admin_id');
+        Session::delete('act_list');
+        Session::delete('last_login_time');
+        $this->redirect('admin/login');
+    }
+
+    public function adminInfo()
+    {
+        $request = Request::instance();
+        $adminId = $request->param('admin_id',1);
+        $adminInfo = [];
+        if($adminId){
+            $adminInfo = Db::name('admin')
+                ->where('admin_id',$adminId)
+                ->find();
+            $adminInfo['password'] = '';
+        }
+        $act = empty($adminId) ? 'add' : 'edit';
+        $role = "";
+        return $this->fetch('info',[
+            'info' => $adminInfo,
+            'act' => $act,
+            'role' => $role
+        ]);
+    }
+
+    public function saveAdminInfo()
+    {
+        $request = Request::instance();
+        $act = $request->param('act');
+        $username = $request->param('user_name');
+        if($act == 'add'){
+            $email =$request->param('email');
+            $password = $request->param('password');
+        }else if($act == 'edit'){
+            $orgPassword = $request->param('org_password');
+            $newPassword = $request->param('new_password');
+            $confirmPassword = $request->param('confirm_password');
+
+        }else if($act == 'del'){
+
+        }
+
+
+
     }
 }

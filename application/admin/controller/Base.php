@@ -8,6 +8,7 @@
 
 namespace app\admin\controller;
 use think\Controller;
+use think\Request;
 
 class Base extends Controller{
     public function __construct()
@@ -20,6 +21,23 @@ class Base extends Controller{
         $this->errors['11'] = '验证码错误';
         $this->errors['12'] = '用户名或密码错误';
         $this->errors['13'] = '用户名或密码不能为空';
+    }
+
+    public function _initialize()
+    {
+        $request = Request::instance();
+        $url = $request->url();
+        $act = str_replace('/','',strrchr($url,'/'));
+        if(in_array($act,array('login','logout','login.html','logout.html'))){
+
+        }else{
+            if(session('admin_id') > 0){
+
+            }else{
+                $this->redirect('admin/login');
+            }
+        }
+
     }
 
     protected function returnJsonError($code,$param='')

@@ -48,7 +48,7 @@ class Admin extends Base{
                     ->field('log_time')
                     ->where('admin_id',$adminInfo['admin_id'])
                     ->where('log_info','后台登录')
-                    ->order('admin_id desc')
+                    ->order('log_id desc')
                     ->limit(1)
                     ->value('log_time');
                 Session::set('last_login_time',$lastLogTime);

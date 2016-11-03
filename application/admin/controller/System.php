@@ -69,10 +69,17 @@ class System extends Base{
 
     public function linkList()
     {
-        $link = Db::table('tp_friend_link')->page(1,10)->select();
+        $request = Request::instance();
+        $keyword = $request->param('keywords');
+        if($keyword){
+            $link = Db::table('tp_friend_link')->where('link_name','like',"%$keyword%")->paginate(1);
+        }else{
+            $link = Db::table('tp_friend_link')->paginate(1);
+        }
+        $page = $link->render();
         return $this->fetch('linkList',[
             'list' => $link,
-            'page' => 1
+            'page' => $page
         ]);
     }
 
@@ -85,11 +92,17 @@ class System extends Base{
         if($request->isPost()){
             if($act == 'add'){
                 db('friend_link')->insert($data);
-                $this->success('添加成功');
+                $this->success('添加成功','system/linkList');
             }elseif($act == 'edit'){
-
+                db('friend_link')->where('link_id',$data['link_id'])->update($data);
+                $this->success('修改成功');
             }elseif($act == 'del'){
-
+                $delRes = db('friend_link')->where('link_id',$data['link_id'])->delete();
+                if($delRes){
+                    exit($this->returnJsonSuccess());
+                }else{
+                    exit($this->returnJsonError(16));
+                }
             }
 
         }else{

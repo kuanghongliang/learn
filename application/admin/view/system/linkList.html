@@ -28,11 +28,11 @@
                                 <table id="list-table" class="table table-bordered table-striped dataTable" role="grid" aria-describedby="example1_info">
                                     <thead>
                                     <tr role="row">
-                                        <th class="sorting" tabindex="0" align="center">排序</th>
-                                        <th class="sorting" tabindex="0" align="center">链接名称</th>
-                                        <th class="sorting" tabindex="0" align="center">链接地址</th>
-                                        <th class="sorting" tabindex="0" align="center">新窗口打开</th>
-                                        <th class="sorting" tabindex="0" align="center">操作</th>
+                                        <th class="sorting" tabindex="0" >排序</th>
+                                        <th class="sorting" tabindex="0" >链接名称</th>
+                                        <th class="sorting" tabindex="0" >链接地址</th>
+                                        <th class="sorting" tabindex="0" >新窗口打开</th>
+                                        <th class="sorting" tabindex="0" >操作</th>
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -74,7 +74,7 @@
                 data : {act:'del',link_id:$(obj).attr('data-id')},
                 dataType : 'json',
                 success : function(data){
-                    if(data){
+                    if(data.rs){
                         $(obj).parent().parent().remove();
                     }else{
                         layer.alert('删除失败', {icon: 2});  //alert('删除失败');

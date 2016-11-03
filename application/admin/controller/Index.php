@@ -7,12 +7,12 @@ class Index extends Base
 {
     public function index()
     {
-        $menuList = getAllMenu();
         $adminId = session('admin_id');
         $lastLoginTime = session('last_login_time');
         $adminInfo = Db::name('admin')
             ->where('admin_id',$adminId)
             ->find();
+        $menuList = getMenuList($adminInfo['act_list']);
         return $this->fetch('index',[
             'menu_list' => $menuList,
             'admin_info' => $adminInfo,

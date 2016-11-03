@@ -41,6 +41,14 @@ function configMenu(){
     );
 
 }
+function getMenuList($actList)
+{
+    $menuList = $this->getAllMenu();
+    if($actList != 'all'){
+
+    }
+    return $menuList;
+}
 //定义全站所有菜单
 function getAllMenu(){
     return	array(

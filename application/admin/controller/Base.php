@@ -23,6 +23,7 @@ class Base extends Controller{
         $this->errors['13'] = '用户名或密码不能为空';
         $this->errors['14'] = '密码错误';
         $this->errors['15'] = '两次密码不一致';
+        $this->errors['16'] = '删除失败';
     }
 
     public function _initialize()

@@ -29,12 +29,24 @@ function getSysInfo(){
     return $sys_info;
 }
 
+function configMenu(){
+    return array(
+        'shop_info'=>'网站信息',
+        'basic'=>'基本设置',
+        'sms'=>'短信设置',
+        'shopping'=>'购物流程设置',
+        'smtp'=>'邮件设置',
+        'water'=>'水印设置',
+        'distribut'=>'分销设置'
+    );
+
+}
 //定义全站所有菜单
 function getAllMenu(){
     return	array(
         'system' => array('name'=>'系统设置','icon'=>'fa-cog','sub_menu'=>array(
             array('name'=>'网站设置','act'=>'index','control'=>'System'),
-            array('name'=>'友情链接','act'=>'linkList','control'=>'Article'),
+            array('name'=>'友情链接','act'=>'linkList','control'=>'System'),
             array('name'=>'自定义导航','act'=>'navigationList','control'=>'System'),
             array('name'=>'区域管理','act'=>'region','control'=>'Tools'),
             array('name'=>'权限资源列表','act'=>'right_list','control'=>'System'),

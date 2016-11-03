@@ -20,7 +20,7 @@
                         <ul class="treeview-menu">
                             {foreach name="vo.sub_menu" item="vv" key="kk"}
                                 <li onclick="makecss(this)" data-id="">
-                                    <a href='' target='rightContent'><i class="fa fa-circle-o"></i>{$vv.name}</a>
+                                    <a href="/admin/{$vv.control}/{$vv.act}" target='rightContent'><i class="fa fa-circle-o"></i>{$vv.name}</a>
                                 </li>
                             {/foreach}
                         </ul>

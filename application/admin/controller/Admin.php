@@ -105,7 +105,19 @@ class Admin extends Base{
             $orgPassword = $request->param('org_password');
             $newPassword = $request->param('new_password');
             $confirmPassword = $request->param('confirm_password');
-
+            $adminInfo = Db::name('admin')
+                ->where('user_name',$username)
+                ->find();
+            if($adminInfo['password'] != md5($orgPassword)){
+                $this->error($this->errors['14']);
+            }
+            if($newPassword != $confirmPassword){
+                $this->error($this->errors['15']);
+            }
+            Db::table('tp_admin')
+                ->where('admin_id',$adminInfo['admin_id'])
+                ->setField('password',md5($newPassword));
+            $this->success('操作成功');
         }else if($act == 'del'){
 
         }

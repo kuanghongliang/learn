@@ -72,9 +72,9 @@ class System extends Base{
         $request = Request::instance();
         $keyword = $request->param('keywords');
         if($keyword){
-            $link = Db::table('tp_friend_link')->where('link_name','like',"%$keyword%")->paginate(1);
+            $link = Db::table('tp_friend_link')->where('link_name','like',"%$keyword%")->paginate(2);
         }else{
-            $link = Db::table('tp_friend_link')->paginate(1);
+            $link = Db::table('tp_friend_link')->paginate(2);
         }
         $page = $link->render();
         return $this->fetch('linkList',[
@@ -122,5 +122,31 @@ class System extends Base{
 
         }
 
+    }
+
+    public function navigationList()
+    {
+        $navigationList = Db::name('navigation')->paginate(2);
+        return $this->fetch('navigationList',[
+            'navigationList' => $navigationList
+        ]);
+    }
+
+    public function navigationOper()
+    {
+        $request = Request::instance();
+        $act = $request->param('act');
+        if($request->isPost()){
+            if($act == 'add'){
+
+            }
+        }else{
+            if($act == 'add'){
+                $navigation = array('id'=>'','name'=>'','sort'=>'','url'=>'');
+                return $this->fetch('navigationOper',[
+                    'navigation' => $navigation
+                ]);
+            }
+        }
     }
 }

@@ -12,7 +12,8 @@ class Index extends Base
         $adminInfo = Db::name('admin')
             ->where('admin_id',$adminId)
             ->find();
-        $menuList = getMenuList($adminInfo['act_list']);
+        $actList = session('act_list');
+        $menuList = getMenuList($actList);
         return $this->fetch('index',[
             'menu_list' => $menuList,
             'admin_info' => $adminInfo,

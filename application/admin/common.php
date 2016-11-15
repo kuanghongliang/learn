@@ -43,7 +43,7 @@ function configMenu(){
 }
 function getMenuList($actList)
 {
-    $menuList = $this->getAllMenu();
+    $menuList = getAllMenu();
     if($actList != 'all'){
 
     }

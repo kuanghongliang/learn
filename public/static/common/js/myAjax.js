@@ -54,15 +54,15 @@ function changeTableVal(table,id_name,id_value,field,obj)
 		var src = "";
 		 if($(obj).attr('src').indexOf("cancel.png") > 0 )
 		 {          
-				src = '/Public/images/yes.png';
+				src = '/static/common/images/yes.png';
 				var value = 1;
 				
 		 }else{                    
-				src = '/Public/images/cancel.png';
+				src = '/static/common/images/cancel.png';
 				var value = 0;
 		 }                                                 
 		$.ajax({
-				url:"/index.php?m=Admin&c=Index&a=changeTableVal&table="+table+"&id_name="+id_name+"&id_value="+id_value+"&field="+field+'&value='+value,			
+				url:"/admin/system/changeTableVal/table/"+table+"/id_name/"+id_name+"/id_value/"+id_value+"/field/"+field+'/value/'+value,
 				success: function(data){									
 					$(obj).attr('src',src);           
 				}

@@ -9,9 +9,10 @@
 namespace app\admin\controller;
 
 
+use app\admin\validate\VNavigation;
 use think\Db;
 use think\Request;
-
+use app\admin\model\Navigation;
 class System extends Base{
     public function index()
     {
@@ -126,9 +127,11 @@ class System extends Base{
 
     public function navigationList()
     {
-        $navigationList = Db::name('navigation')->paginate(2);
+        $navigationList = Db::name('navigation')->order('id desc')->paginate(2);
+        $page = $navigationList->render();
         return $this->fetch('navigationList',[
-            'navigationList' => $navigationList
+            'navigationList' => $navigationList,
+            'page' => $page
         ]);
     }
 
@@ -136,9 +139,28 @@ class System extends Base{
     {
         $request = Request::instance();
         $act = $request->param('act');
+        $data = $request->param();
         if($request->isPost()){
             if($act == 'add'){
-
+                $result = $this->validate($data,'VNavigation');
+                if(true !== $result){
+                    $this->error($result);
+                }
+                $res = Navigation::saveForm($data);
+                if(!$res){
+                    $this->error('插入数据失败');
+                }
+                $this->success('添加成功','system/navigationList');
+            }else if($act == 'edit'){
+                $result = $this->validate($data,'VNavigation');
+                if(true !== $result){
+                    $this->error($result);
+                }
+                $res = Navigation::saveForm($data,['id'=>$data['id']]);
+                if(!$res){
+                    $this->error('更新数据失败');
+                }
+                $this->success('编辑成功','system/navigationList');
             }
         }else{
             if($act == 'add'){
@@ -146,7 +168,26 @@ class System extends Base{
                 return $this->fetch('navigationOper',[
                     'navigation' => $navigation
                 ]);
+            }else if($act == 'edit'){
+                $navigation = db('navigation')->where('id',$data['id'])->find();
+                return $this->fetch('navigationOper',[
+                    'navigation' => $navigation,
+                ]);
+            }else if($act == 'del'){
+                db('navigation')->where('id',$data['id'])->delete();
+                $this->success('操作成功','system/navigationList');
             }
         }
+    }
+
+    public function changeTableVal()
+    {
+        $request = Request::instance();
+        $table = $request->param('table');
+        $idName = $request->param('id_name');
+        $idValue = $request->param('id_value');
+        $field = $request->param('field');
+        $value = $request->param('value');
+        Db::name($table)->where($idName,$idValue)->update([$field=>$value]);
     }
 }

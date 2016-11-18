@@ -57,7 +57,7 @@ function getAllMenu(){
             array('name'=>'友情链接','act'=>'linkList','control'=>'System'),
             array('name'=>'自定义导航','act'=>'navigationList','control'=>'System'),
             array('name'=>'区域管理','act'=>'region','control'=>'Tools'),
-            array('name'=>'权限资源列表','act'=>'right_list','control'=>'System'),
+            array('name'=>'权限资源列表','act'=>'rightList','control'=>'System'),
         )),
         'access' => array('name' => '权限管理', 'icon'=>'fa-gears', 'sub_menu' => array(
             array('name' => '管理员列表', 'act'=>'index', 'control'=>'Admin'),
@@ -147,6 +147,21 @@ function getAllMenu(){
             array('name' => '自提点列表', 'act'=>'index', 'control'=>'Pickup'),
             array('name' => '添加自提点', 'act'=>'add', 'control'=>'Pickup'),
         ))
+    );
+}
+
+function getGroup()
+{
+    //权限组
+    return array(
+        'system'=>'系统设置',
+        'content'=>'内容管理',
+        'goods'=>'商品中心',
+        'member'=>'会员中心',
+        'order'=>'订单中心',
+        'marketing'=>'营销推广',
+        'tools'=>'插件工具',
+        'count'=>'统计报表'
     );
 }
 

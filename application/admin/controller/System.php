@@ -190,4 +190,48 @@ class System extends Base{
         $value = $request->param('value');
         Db::name($table)->where($idName,$idValue)->update([$field=>$value]);
     }
+
+    public function rightList()
+    {
+        $group = getGroup();
+        $rightList = Db::name('system_menu')->paginate(2);
+        $page = $rightList->render();
+        $this->assign([
+            'group' => $group,
+            'rightList' => $rightList,
+            'page' => $page
+        ]);
+        return $this->fetch('rightList');
+    }
+    public function addRight()
+    {
+        $group = getGroup();
+        $info = array('id'=>'','name'=>'','group'=>'system','right'=>'');
+        $ctrDirPath = APP_PATH.'admin/controller';
+        $planList = array();
+        $dir = opendir($ctrDirPath);
+        while($file = readdir($dir)){
+            if($file != '.' && $file != '..'){
+                $planList[] = basename($file,'.php');
+            }
+        }
+        $this->assign('group',$group);
+        $this->assign('info',$info);
+        $this->assign('planList',$planList);
+        return $this->fetch('rightOper');
+    }
+    public function getCtrFuns()
+    {
+        $request = Request::instance();
+        $ctr = $request->param('controller');
+        $className = "\\app\\admin\\controller\\".$ctr;
+        $getCtr = get_class_methods(new $className());
+        $baseCtr = get_class_methods(new \app\admin\controller\Base());
+        $diffCtr = array_diff($getCtr,$baseCtr);
+        $html = '';
+        foreach($diffCtr as $val){
+            $html .=  "<option value='".$val."'>".$val."</option>";
+        }
+        exit($html);
+    }
 }
